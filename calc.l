@@ -79,22 +79,22 @@ int process_command(int token)
     case LexPlus: {
         int a=my_stack_pull(&stack);
         int b=my_stack_pull(&stack);
-        my_stack_push(&stack, a+b);
+        my_stack_push(&stack, b+a);
         break;}
     case LexMinus: {
         int a=my_stack_pull(&stack);
         int b=my_stack_pull(&stack);
-        my_stack_push(&stack, a-b);
+        my_stack_push(&stack, b-a);
         break;}
     case LexDiv: {
         int a=my_stack_pull(&stack);
         int b=my_stack_pull(&stack);
-        my_stack_push(&stack, a/b);
+        my_stack_push(&stack, b/a);
         break;}
     case LexMult: {
         int a=my_stack_pull(&stack);
         int b=my_stack_pull(&stack);
-        my_stack_push(&stack, a*b);
+        my_stack_push(&stack, b*a);
         break;}
     case LexEnd:
     case 0:
