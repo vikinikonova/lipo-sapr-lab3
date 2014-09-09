@@ -75,26 +75,73 @@ int process_command(int token)
     switch (token) {
     case LexNumber:
         my_stack_push(&stack, int_value);
+        if (my_stack_is_full(&stack)) {
+            return -1;
+        }
         break;
     case LexPlus: {
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int a=my_stack_pull(&stack);
+
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int b=my_stack_pull(&stack);
-        my_stack_push(&stack, b+a);
+
+        my_stack_push(&stack, a+b);
+        if (my_stack_is_full(&stack)) {
+            return -1;
+        }
         break;}
     case LexMinus: {
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int a=my_stack_pull(&stack);
+
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int b=my_stack_pull(&stack);
+
         my_stack_push(&stack, b-a);
+        if (my_stack_is_full(&stack)) {
+            return -1;
+        }
         break;}
     case LexDiv: {
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int a=my_stack_pull(&stack);
+
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int b=my_stack_pull(&stack);
+
         my_stack_push(&stack, b/a);
+        if (my_stack_is_full(&stack)) {
+            return -1;
+        }
         break;}
     case LexMult: {
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int a=my_stack_pull(&stack);
+
+        if (my_stack_is_empty(&stack)) {
+            return -1;
+        }
         int b=my_stack_pull(&stack);
+
         my_stack_push(&stack, b*a);
+        if (my_stack_is_full(&stack)) {
+            return -1;
+        }
         break;}
     case LexEnd:
     case 0:
