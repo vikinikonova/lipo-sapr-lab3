@@ -36,6 +36,8 @@ int end_file;
 
 %}
 
+%s SKIPERROR
+
 digit     [0-9]
 number    {digit}+
 
@@ -66,6 +68,7 @@ number    {digit}+
 [ \t]		{ }
 .		{ return LexUnknown; }
 
+<SKIPERROR>[^\n]* {}
 %%
 
 int process_command(int token)
@@ -194,6 +197,9 @@ void calc()
         fprintf(stderr, "parse line\n");
         if (calc_line() == 0) {
             printf("FAIL\n");
+            BEGIN(SKIPERROR);
+            yylex();
+            BEGIN(INITIAL);
         }
         else {
             printf("OK\n");
