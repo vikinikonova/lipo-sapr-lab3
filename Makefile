@@ -10,13 +10,14 @@ LFLAGS =
 LN     = gcc
 LNFLAGS=
 
-SRC    = calc.l mystack.c mystack.h
-OBJ    = calc.o mystack.o
+SRC    = calc.l mystack.c mystack.h chstack.c chstack.h word.c word.h
+OBJ    = calc.o mystack.o chstack.o word.o
 
 all:	calc
 
 test: all
 	./calc < test1.txt
+	./calc < test2.txt
 
 calc:	$(OBJ)
 	$(LN) $(LNFLAGS) -o calc $(OBJ) $(CMATH)
