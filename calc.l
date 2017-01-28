@@ -30,19 +30,38 @@ typedef enum {
     LexUnknown,
 } LexType;
 
-my_stack stack;
+my_stack calc_stack;
+ch_stack char_stack;
+ch_stack temp_stack;
 
+int word_opened;
+int apostroph_count;
 int end_file;
 
 %}
 
 %s SKIPERROR
 
-digit     [0-9]
-number    {digit}+
+digit             [0-9]
+number            {digit}+
+word              [a-zA-Z ]+
+apostroph         \"
+double_apostroph  \"\"
 
 %%
 
+{word}  {
+          char_value = yytext;
+          return LexWord;
+        }
+{apostroph} {
+          fprintf(stderr, "\"");
+          return LexApostroph;
+        }
+{double_apostroph} {
+          fprintf(stderr, "\\\"");
+          return LexDoubleApostroph;
+        }
 {number}	{
 		  int_value=atoi(yytext);
 		  fprintf(stderr, "found %d\n", int_value);
@@ -76,6 +95,35 @@ int process_command(int token)
     fprintf(stderr, "token: %d\n", token);
 
     switch (token) {
+    case LexApostroph: {
+        if (word_opened == 1) { 
+            if (apostroph_count % 2 != 0) {
+                return -1;
+            }
+            
+            word_opened = 0;
+            apostroph_count = 0;
+        } else if (word_opened == 0) {
+            word_opened = 1;
+        }
+        
+        break; }
+    case LexDoubleApostroph: {
+        apostroph_count++;
+        char_stack_push(&char_stack, '\"');
+        break; }
+    case LexWord: {
+        if (strcmp(char_value, " ") != 0) {
+            if (word_opened == 0) {
+                return -1;
+            }
+            int i = 0;
+            while (i < strlen(char_value)) {
+                char_stack_push(&char_stack, char_value[i++]);
+            }
+            char_stack_push(&char_stack, "\0");
+        }
+        break; }
     case LexNumber:
         my_stack_push(&stack, int_value);
         if (my_stack_is_full(&stack)) {
