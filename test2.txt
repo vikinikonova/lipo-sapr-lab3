@@ -1,0 +1,6 @@
+"Hello" " " +s "to all the world" +s
+"My name is " "Viktoriya" +s
+
+"I have " 100500 +n " best friends" +s
+
+"Me" 4 *s
