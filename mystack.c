@@ -21,48 +21,58 @@ This file is part of Reverse Notation Calc.
 
 void my_stack_init(my_stack* stack, size_t size)
 {
-    stack->size = size;
-    stack->count = 0;
-    stack->ptr = calloc(stack->size, sizeof(int));
+    stack->n_size = size;
+    stack->n_count = 0;
+    stack->n = calloc(stack->n_size, sizeof(int));
 }
 
 void my_stack_done(my_stack* stack)
 {
-    stack->size = 0;
-    stack->count = 0;
-    free(stack->ptr);
+    stack->n_size = 0;
+    stack->n_count = 0;
+    free(stack->n);
+}
+
+void my_stack_clean(my_stack* stack)
+{
+    stack->n_count = 0;
+}
+
+int my_stack_count(my_stack* stack)
+{
+    return stack->n_count;
 }
 
 void my_stack_push(my_stack* stack, int value)
 {
-    if (stack->count >= stack->size) {
+    if (stack->n_count >= stack->n_size) {
         return;
     }
-    stack->ptr[stack->count++] = value;
+    stack->n[stack->n_count++] = value;
 }
 
 int my_stack_pull(my_stack* stack)
 {
-    if (stack->count == 0) {
+    if (stack->n_count == 0) {
         return -1;
     }
-    return stack->ptr[--stack->count];
+    return stack->n[--stack->n_count];
 }
 
 int my_stack_top(my_stack* stack)
 {
-    if (stack->count == 0) {
+    if (stack->n_count == 0) {
         return -1;
     }
-    return stack->ptr[stack->count];
+    return stack->n[stack->n_count];
 }
 
 int my_stack_is_empty(my_stack* stack)
 {
-    return stack->count == 0;
+    return stack->n_count == 0;
 }
 
 int my_stack_is_full(my_stack* stack)
 {
-    return stack->count >= stack->size;
+    return stack->n_count >= stack->n_size;
 }
